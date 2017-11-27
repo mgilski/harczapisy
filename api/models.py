@@ -27,7 +27,7 @@ class ParticipantList(models.Model):
         ('tv', 'Medialna'),
         ('cln', 'Porządkowa'),
     )
-    patrol_id = models.ForeignKey(PatrolList, on_delete=models.CASCADE)
+    patrol = models.ForeignKey(PatrolList, on_delete=models.CASCADE)
     pesel = models.CharField(max_length=11)
     first_name = models.CharField(max_length=40)
     second_name = models.CharField(max_length=40, blank=True)
