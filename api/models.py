@@ -9,7 +9,7 @@ class PatrolList(models.Model):
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
-        return f'{name}, {hufiec}'
+        return f'{self.name}, {self.hufiec}'
 
 
 class ParticipantList(models.Model):
@@ -37,9 +37,9 @@ class ParticipantList(models.Model):
     service_type = models.CharField(max_length=3, choices=SERVICES)
     rescue_course = models.CharField(max_length=255, blank=True)
     which_rescue_service = models.IntegerField(null=True)
-    rescue_certificate = models.FileField(upload_to='rescue_certificates/', blank=True)
+    rescue_certificate = models.URLField(blank=True)
     leader = models.BooleanField()
-    leader_email = models.EmailField()
+    leader_email = models.EmailField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
