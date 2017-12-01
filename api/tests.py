@@ -38,10 +38,11 @@ class ModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
 
-        patrol_data = dict(patrol_row)
-        self.patrollist = PatrolList(**patrol_data)
-        patrol_data['name'] = 'Super patrol 2'
-        PatrolList.objects.create(**patrol_data)
+        patrol_data1 = dict(patrol_row)
+        patrol_data2 = dict(patrol_row)
+        self.patrollist = PatrolList(**patrol_data1)
+        patrol_data2['name'] = 'Super patrol 2'
+        PatrolList.objects.create(**patrol_data2)
         print(PatrolList.objects.values('id'))
         participant_data = dict(participant_row)
         participant_data['patrol'] = PatrolList.objects.latest('id')
@@ -76,11 +77,22 @@ class CreateParticipantTestCase(TestCase):
         
         
     def test_creating_participant(self):
-        """Test the api has participant creation capability."""
-        print(reverse('create_participant'))
+        """Test if the api has participant creation capability."""
+        participant_data = dict(self.participant_data)
         self.response = self.client.post(
             reverse('create_participant'),
-            self.participant_data,
+            participant_data,
             format="json")
 
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+    def test_creating_participant(self):
+        """Test if the api has participant creation capability with wrong PESEL"""
+        participant_data = dict(self.participant_data)
+        participant_data['pesel'] = '97090515810'
+        self.response = self.client.post(
+            reverse('create_participant'),
+            participant_data,
+            format="json")
+
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
