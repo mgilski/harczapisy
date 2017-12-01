@@ -74,25 +74,48 @@ class CreateParticipantTestCase(TestCase):
         self.patrol_data = dict(patrol_row)
         PatrolList.objects.create(**patrol_row)
         self.participant_data['patrol'] = PatrolList.objects.latest('id').id
-        
-        
+
+    def create_participant_test(self, succeed, key=None, value=None):
+        participant_data = dict(self.participant_data)
+        if key is not None:
+            participant_data[key] = value
+        self.response = self.client.post(
+            reverse('create_participant'),
+            participant_data,
+            format="json")
+        if succeed:
+            code = status.HTTP_201_CREATED
+        else:
+            code = status.HTTP_400_BAD_REQUEST
+        self.assertEqual(self.response.status_code, code)
+
     def test_creating_participant(self):
         """Test if the api has participant creation capability."""
-        participant_data = dict(self.participant_data)
-        self.response = self.client.post(
-            reverse('create_participant'),
-            participant_data,
-            format="json")
+        self.create_participant_test(True)
 
-        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
-
-    def test_creating_participant(self):
+    def test_creating_participant_wrong_pesel(self):
         """Test if the api has participant creation capability with wrong PESEL"""
-        participant_data = dict(self.participant_data)
-        participant_data['pesel'] = '97090515810'
-        self.response = self.client.post(
-            reverse('create_participant'),
-            participant_data,
-            format="json")
+        self.create_participant_test(False, 'pesel', '97090515810')
+        self.create_participant_test(False, 'pesel', '12312312312')
+        self.create_participant_test(False, 'pesel', '12312312312')
+        self.create_participant_test(False, 'pesel', '85743839548')
+        self.create_participant_test(False, 'pesel', '63526748492')
+        self.create_participant_test(False, 'pesel', '')
 
-        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_creating_participant_wrong_rank(self):
+        """Test if the api has participant creation capability with wrong instructor rank"""
+        self.create_participant_test(False, 'instructor_rank', 'pwd.')
+        self.create_participant_test(False, 'instructor_rank', 'phm.')
+        self.create_participant_test(False, 'instructor_rank', 'hm.')
+        self.create_participant_test(False, 'instructor_rank', 'pw')
+        self.create_participant_test(False, 'instructor_rank', 'ph')
+        self.create_participant_test(False, 'instructor_rank', '')
+
+    def test_creating_participant_wrong_email(self):
+        """Test if the api has participant creation capability with wrong email"""
+        self.create_participant_test(False, 'leader_email', 'leon@gmail')
+        self.create_participant_test(False, 'leader_email', 'leon@gmail.')
+        self.create_participant_test(False, 'leader_email', '@gmail')
+        self.create_participant_test(False, 'leader_email', '@gmail.com')
+        self.create_participant_test(False, 'leader_email', 'leon@')
+        self.create_participant_test(False, 'leader_email', '')
