@@ -7,16 +7,18 @@ class CreatePatrolView(generics.ListCreateAPIView):
     queryset = PatrolList.objects.all()
     serializer_class = PatrolListSerializer
 
-    def perform_create(self, serializer):
-        """Save the post data when creating a new bucketlist."""
-        serializer.save()
-
 
 class CreateParticipantView(generics.ListCreateAPIView):
     """This class defines the create behavior of our rest api."""
     queryset = ParticipantList.objects.all()
     serializer_class = ParticipantListSerializer
 
-    def perform_create(self, serializer):
-        """Save the post data when creating a new bucketlist."""
-        serializer.save()
+
+class PatrolDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PatrolList.objects.all()
+    serializer_class = PatrolListSerializer
+
+
+class ParticipantDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ParticipantList.objects.all()
+    serializer_class = ParticipantListSerializer
