@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PatrolList, ParticipantList
+from .models import PatrolList, ParticipantList, MessageList, MailboxList
 from rest_framework.serializers import ValidationError
 
 # TODO: rescue service number validator, one leader validator, one pesel validator
@@ -70,3 +70,20 @@ class ParticipantListSerializer(ParticipantListAdminSerializer):
                 and data['leader'] == True:
             raise ValidationError("Patrol can't have more than one leader.")
         return data
+
+
+class MailboxSerializer(serializers.ModelSerializer):
+    """Mailbox serializer"""
+
+    class Meta:
+        model = MailboxList
+        fields = '__all__'
+
+
+class MessageListSerializer(serializers.ModelSerializer):
+    """Message list serializer"""
+
+    class Meta:
+        model = MessageList
+        fields = '__all__'
+        read_only_fields = ['date_created']
