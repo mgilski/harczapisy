@@ -6,8 +6,8 @@ from rest_framework.serializers import ValidationError
 
 
 
-class PatrolListSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
+class PatrolListAdminSerializer(serializers.ModelSerializer):
+    """Patrol serializer for admins"""
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -19,9 +19,13 @@ class PatrolListSerializer(serializers.ModelSerializer):
 
         # ]
 
+class PatrolListSerializer(PatrolListAdminSerializer):
+	"""Patrol serializer."""
+	pass
 
-class ParticipantListSerializer(serializers.ModelSerializer):
-    """Participant serializer."""
+
+class ParticipantListAdminSerializer(serializers.ModelSerializer):
+    """Participant serializer for admins."""
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -33,6 +37,11 @@ class ParticipantListSerializer(serializers.ModelSerializer):
                   'leader','leader_email','date_created','date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
+    
+
+class ParticipantListSerializer(ParticipantListAdminSerializer):
+	"""Participant serializer."""
+	
     def validate_pesel(self, pesel_str):
         pesel = [ int(pesel_digit) for pesel_digit in pesel_str ]
         validation_number = 9*pesel[0] + 7*pesel[1] + 3*pesel[2] + \
