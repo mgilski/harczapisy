@@ -2,6 +2,10 @@ from rest_framework import serializers
 from .models import PatrolList, ParticipantList
 from rest_framework.serializers import ValidationError
 
+# TODO: rescue service number validator, one leader validator, one pesel validator
+
+
+
 class PatrolListSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
@@ -52,4 +56,8 @@ class ParticipantListSerializer(serializers.ModelSerializer):
         check_requirement(data['service_type'] == 'med', 'rescue_course')
         check_requirement(data['service_type'] == 'med', 'rescue_certificate')
         check_requirement(data['service_type'] == 'med', 'which_rescue_service')
+
+        if ParticipantList.objects.filter(patrol=data['patrol']).filter(leader=True).count() > 0 \
+        	and data['leader'] == True:
+        	raise ValidationError("Patrol can't have two leaders.")
         return data
