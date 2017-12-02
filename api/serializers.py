@@ -58,6 +58,6 @@ class ParticipantListSerializer(serializers.ModelSerializer):
         check_requirement(data['service_type'] == 'med', 'which_rescue_service')
 
         if ParticipantList.objects.filter(patrol=data['patrol']).filter(leader=True).count() > 0 \
-        	and data['leader'] == True:
-        	raise ValidationError("Patrol can't have two leaders.")
+        		and data['leader'] == True:
+        	raise ValidationError("Patrol can't have more than one leader.")
         return data
