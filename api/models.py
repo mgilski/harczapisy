@@ -28,7 +28,7 @@ class ParticipantList(models.Model):
         ('cln', 'Porządkowa'),
     )
     patrol = models.ForeignKey(PatrolList, on_delete=models.CASCADE)
-    pesel = models.CharField(max_length=11)
+    pesel = models.CharField(max_length=11, unique=True)
     first_name = models.CharField(max_length=40)
     second_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40)
