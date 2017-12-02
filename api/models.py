@@ -46,3 +46,15 @@ class ParticipantList(models.Model):
     def __str__(self):
         """Return a human readable representation of the model instance."""
         return f'{first_name} {last_name}'
+
+
+class MailboxList(models.Model);
+    email = EmailField(unique=True)
+
+
+class MessageList(models.Model):
+    mailbox = models.ForeignKey(MailboxList, on_delete=models.CASCADE)
+    email = EmailField()
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
