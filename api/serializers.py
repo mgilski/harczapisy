@@ -20,8 +20,8 @@ class PatrolListAdminSerializer(serializers.ModelSerializer):
         # ]
 
 class PatrolListSerializer(PatrolListAdminSerializer):
-	"""Patrol serializer."""
-	pass
+    """Patrol serializer."""
+    pass
 
 
 class ParticipantListAdminSerializer(serializers.ModelSerializer):
@@ -40,8 +40,8 @@ class ParticipantListAdminSerializer(serializers.ModelSerializer):
     
 
 class ParticipantListSerializer(ParticipantListAdminSerializer):
-	"""Participant serializer."""
-	
+    """Participant serializer."""
+    
     def validate_pesel(self, pesel_str):
         pesel = [ int(pesel_digit) for pesel_digit in pesel_str ]
         validation_number = 9*pesel[0] + 7*pesel[1] + 3*pesel[2] + \
@@ -67,6 +67,6 @@ class ParticipantListSerializer(ParticipantListAdminSerializer):
         check_requirement(data['service_type'] == 'med', 'which_rescue_service')
 
         if ParticipantList.objects.filter(patrol=data['patrol']).filter(leader=True).count() > 0 \
-        		and data['leader'] == True:
-        	raise ValidationError("Patrol can't have more than one leader.")
+                and data['leader'] == True:
+            raise ValidationError("Patrol can't have more than one leader.")
         return data
