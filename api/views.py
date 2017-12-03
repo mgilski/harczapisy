@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.mail import send_mail
 
 
 ##### PATROL
@@ -45,6 +46,13 @@ class CreateParticipantView(generics.ListCreateAPIView):
                                             email=serializer.data['leader_email'],
                                             password='wH%^jy`EW)&#AN9Y')
             token = str(Token.objects.get_or_create(user=user)[0])
+            send_mail(
+                'test',
+                f'token: {token}',
+                '',
+                [serializer.data['leader_email']],
+                fail_silently=False,
+            )
 
 
     def create(self, request, *args, **kwargs):
