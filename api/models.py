@@ -35,6 +35,8 @@ class ParticipantList(models.Model):
     instructor_rank = models.CharField(max_length=3, choices=RANKS, blank=True)
     which_service = models.IntegerField()
     service_type = models.CharField(max_length=3, choices=SERVICES)
+    bus = models.BooleanField(default=False)
+    cash = models.BooleanField(default=False)
     rescue_course = models.CharField(max_length=255, blank=True)
     which_rescue_service = models.IntegerField(null=True)
     rescue_certificate = models.URLField(blank=True)

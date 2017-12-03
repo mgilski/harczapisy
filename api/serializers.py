@@ -30,11 +30,7 @@ class ParticipantListAdminSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = ParticipantList
-        fields = ('patrol','pesel','first_name',
-                  'second_name','last_name','instructor_rank',
-                  'which_service','service_type','rescue_course',
-                  'which_rescue_service','rescue_certificate',
-                  'leader','leader_email','date_created','date_modified')
+        fields = '__all__'
         read_only_fields = ('date_created', 'date_modified')
 
     
