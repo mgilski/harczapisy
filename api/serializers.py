@@ -7,7 +7,7 @@ from rest_framework.serializers import ValidationError
 
 
 class PatrolListAdminSerializer(serializers.ModelSerializer):
-    """Patrol serializer for admins"""
+    """Patrol serializer for admins."""
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -19,9 +19,17 @@ class PatrolListAdminSerializer(serializers.ModelSerializer):
 
         # ]
 
-class PatrolListSerializer(PatrolListAdminSerializer):
+class PatrolListUserSerializer(PatrolListAdminSerializer):
     """Patrol serializer."""
     pass
+
+
+class PatrolListSerializer(PatrolListUserSerializer):
+    """Patrol serializer for logged in users."""
+    
+    def validate(self, data):
+        print(data)
+        return data
 
 
 class ParticipantListAdminSerializer(serializers.ModelSerializer):
@@ -35,7 +43,7 @@ class ParticipantListAdminSerializer(serializers.ModelSerializer):
 
     
 
-class ParticipantListSerializer(ParticipantListAdminSerializer):
+class ParticipantListUserSerializer(ParticipantListAdminSerializer):
     """Participant serializer."""
     
     def validate_pesel(self, pesel_str):
@@ -66,6 +74,10 @@ class ParticipantListSerializer(ParticipantListAdminSerializer):
                 and data['leader'] == True:
             raise ValidationError("Patrol can't have more than one leader.")
         return data
+
+
+class ParticipantListSerializer(ParticipantListUserSerializer):
+    pass
 
 
 class MailboxSerializer(serializers.ModelSerializer):

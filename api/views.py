@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .serializers import PatrolListSerializer, ParticipantListSerializer
 from .serializers import PatrolListAdminSerializer, ParticipantListAdminSerializer
+from .serializers import PatrolListUserSerializer, ParticipantListUserSerializer
 from .serializers import MailboxSerializer, MessageListSerializer
 from .models import PatrolList, ParticipantList, MailboxList, MessageList
 from django.contrib.auth.models import User
@@ -12,23 +13,41 @@ from django.core.mail import send_mail
 
 ##### PATROL
 
-class CreatePatrolView(generics.ListCreateAPIView):
+## Create
+class ParentCreatePatrolView(generics.ListCreateAPIView):
+    queryset = PatrolList.objects.all()
+
+
+class CreatePatrolUserView(ParentCreatePatrolView):
     """This class defines the create behavior of our rest api."""
-    queryset = PatrolList.objects.all()
-    serializer_class = PatrolListSerializer
+    serializer_class = PatrolListUserSerializer
 
 
-class CreatePatrolAdminView(CreatePatrolView):
+class CreatePatrolAdminView(ParentCreatePatrolView):
     serializer_class = PatrolListAdminSerializer
 
 
-class PatrolDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PatrolList.objects.all()
+class CreatePatrolView(ParentCreatePatrolView):
     serializer_class = PatrolListSerializer
 
 
-class PatrolDetailAdminView(PatrolDetailView):
+
+
+## Detail
+class ParentPatrolDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PatrolList.objects.all()
+
+
+class PatrolDetailUserView(ParentPatrolDetailView):
+    serializer_class = PatrolListUserSerializer
+
+
+class PatrolDetailAdminView(ParentPatrolDetailView):
     serializer_class = PatrolListAdminSerializer
+
+
+class PatrolDetailView(ParentPatrolDetailView):
+    serializer_class = PatrolListSerializer
 
 
 
@@ -54,13 +73,6 @@ class CreateParticipantView(generics.ListCreateAPIView):
                 fail_silently=False,
             )
 
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CreateParticipantAdminView(CreateParticipantView):

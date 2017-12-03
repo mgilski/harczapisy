@@ -40,7 +40,7 @@ class ParticipantList(models.Model):
     rescue_course = models.CharField(max_length=255, blank=True)
     which_rescue_service = models.IntegerField(null=True)
     rescue_certificate = models.URLField(blank=True)
-    leader = models.BooleanField()
+    leader = models.BooleanField(default=False)
     leader_email = models.EmailField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
