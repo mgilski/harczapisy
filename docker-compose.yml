@@ -11,13 +11,23 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
   web:
-    build: .
+    build: ./back
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - ./back:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+  front:
+    # build: ./front
+    image: ugommirikwe/vue-app-webpack-template:0.2.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./front:/app
+    # command: npm run dev
+    # working_dir: /app
 volumes:
     pg_data: {}
+    vol_front: {}
